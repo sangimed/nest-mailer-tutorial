@@ -2,21 +2,22 @@ import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { MailController } from './mail.controller';
 
 @Module({
   imports: [
     MailerModule.forRootAsync({
       useFactory: () => ({
         transport: {
-          host: 'localhost',
-          port: 1025,
+          host: process.env.SMTP_HOST,
+          port: +process.env.SMTP_PORT,
           secure: false,
           tls: {
             rejectUnauthorized: false,
           },
         },
         defaults: {
-          from: '"Sangimed" <sangimed@dumbmail.me>',
+          from: process.env.FROM,
         },
         template: {
           dir: __dirname + '/../../templates',
@@ -30,5 +31,6 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
   ],
   providers: [MailService],
   exports: [MailService],
+  controllers: [MailController],
 })
 export class MailModule {}

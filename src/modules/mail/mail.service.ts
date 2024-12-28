@@ -23,21 +23,21 @@ export class MailService {
 
       const sendMailParams = {
         to: emailsList,
-        from: process.env.SMTP_FROM || 'no-reply@nestjs.com',
+        from: process.env.SMTP_FROM,
         subject: params.subject,
         template: params.template,
         context: params.context,
       };
       const response = await this.mailerService.sendMail(sendMailParams);
       this.logger.log(
-        `Envoi du mail OK avec les paramètres suivants : ${JSON.stringify(
+        `Email sent successfully to recipients with the following parameters : ${JSON.stringify(
           sendMailParams,
         )}`,
         response,
       );
     } catch (error) {
       this.logger.error(
-        `Erreur lors de l'envoi du mail avec les paramètres suivants : ${JSON.stringify(
+        `Error while sending mail with the following parameters : ${JSON.stringify(
           params,
         )}`,
         error,
